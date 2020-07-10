@@ -237,9 +237,13 @@ EOF
 else
   echo "Nginx isn't installed due to choice of the user!"
 fi
+
+echo "  ******************************************************************************* "
+echo " " 
 echo -e "* Se debe configurar para arrancar desde pycharm, copiar y pegar estos valores"
 echo -e "* Script path: ${OE_HOME_EXT}/odoo/odoo-bin "
 echo -e "* Parameters: -c /etc/${OE_CONFIG}.conf"
+echo " "
 echo "-----------------------------------------------------------"
 echo "Listo! Otras especificaciones interesantes:"
 echo "Port: $OE_PORT"
