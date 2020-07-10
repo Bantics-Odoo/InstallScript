@@ -244,7 +244,7 @@ deactivate
 echo "  ******************************************************************************* "
 echo " " 
 echo -e "* Se debe configurar para arrancar desde pycharm, copiar y pegar estos valores"
-echo -e "* Primero, en File - Open abrir  ${OE_HOME_EXT}/odoo/ "
+echo -e "* Primero, en File - Open abrir  ${OE_HOME_EXT}/ "
 echo -e "* Configurar "
 echo -e "* Script path: ${OE_HOME_EXT}/odoo/odoo-bin "
 echo -e "* Parameters: -c /etc/${OE_CONFIG}.conf"
