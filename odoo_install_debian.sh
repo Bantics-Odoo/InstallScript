@@ -15,7 +15,7 @@
 # ./odoo_install_debian.sh
 ################################################################################
 
-OE_USER="rfpolverini"
+OE_USER=$1
 # tu usuario de debian actual, para entornos de desarrollo.
 OE_HOME="/home/$OE_USER/repoOdoo/Bantics-Odoo"
 # path base de los repos, lo solemos tener localmente dentro del home del usuario
@@ -46,6 +46,20 @@ LONGPOLLING_PORT="8072"
 ## in order to have correct version of wkhtmltopdf installed, for a danger note refer to
 ## https://github.com/odoo/odoo/wiki/Wkhtmltopdf ):
 ## https://www.odoo.com/documentation/12.0/setup/install.html#debian-ubuntu
+
+# Valida primer arg ingresado
+if [ -z "$1" ]
+  then
+    echo "Tenes que poner el usuario como primer argumento"
+    exit 1
+fi
+
+#Confirmacion
+read -p "Se ejecutara script con usuario ${OE_USER} si es correcto, presiona enter, sino CTRL+C para abortar"
+ 
+echo "Continuamos"
+
+
 
 WKHTMLTOX_X64=https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb
 WKHTMLTOX_X32=https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_i386.deb
