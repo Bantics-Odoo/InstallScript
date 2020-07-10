@@ -19,7 +19,7 @@ OE_USER=$1
 # tu usuario de debian actual, para entornos de desarrollo.
 OE_HOME="/home/$OE_USER/repoOdoo/Bantics-Odoo"
 # path base de los repos, lo solemos tener localmente dentro del home del usuario
-OE_HOME_EXT="OE_HOME/odoo"
+OE_HOME_EXT="$OE_HOME/odoo"
 # The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
 # Set to true if you want to install it, false if you don't need it or have it already installed.
 INSTALL_WKHTMLTOPDF="True"
