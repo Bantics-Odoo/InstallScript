@@ -126,6 +126,8 @@ sudo mkdir $OE_HOME/custom/addons
 echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 
+echo -e "* Removing existing config file"
+sudo rm /etc/${OE_CONFIG}.conf
 
 echo -e "* Creating server config file"
 sudo su root -c "printf '[options] \n; This is the password that allows database operations:\n' >> /etc/${OE_CONFIG}.conf"
