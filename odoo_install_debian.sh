@@ -260,7 +260,7 @@ echo "Listo! Otras especificaciones interesantes:"
 echo "Port: $OE_PORT"
 echo "User service: $OE_USER"
 echo "User PostgreSQL: $OE_USER"
-echo "Code location: ${OE_HOME_EXT}
+echo "Code location: ${OE_HOME_EXT}"
 echo "Addons folder: $OE_USER/$OE_CONFIG/addons/"
 echo -e "Password superadmin database: $OE_SUPERADMIN"
 echo "-----------------------------------------------------------"
