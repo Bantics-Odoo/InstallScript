@@ -17,7 +17,7 @@
 
 OE_USER=$1
 # tu usuario de debian actual, para entornos de desarrollo.
-OE_HOME="/home/$OE_USER/repoOdoo/Bantics-Odoo"
+OE_HOME="/home/$OE_USER/repoOdoo"
 # path base de los repos, lo solemos tener localmente dentro del home del usuario
 OE_HOME_EXT="$OE_HOME/odoo"
 # The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
@@ -86,9 +86,6 @@ echo -e "\n--- Installing Python 3 + pip3 --"
 sudo apt-get install git python3 python3-pip build-essential wget python3-dev python3-venv python3-wheel libxslt1-dev -y
 sudo apt-get install libzip-dev libldap2-dev libsasl2-dev python3-setuptools node-less gdebi -y
 
-#echo -e "\n---- Install python packages/requirements ----"
-#sudo pip3 install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt
-
 echo -e "\n---- Installing nodeJS NPM and rtlcss for LTR support ----"
 sudo apt-get install nodejs npm -y
 sudo npm install -g rtlcss
@@ -123,8 +120,8 @@ echo -e "\n==== Installing ODOO Server ===="
 sudo git clone --depth 1 --branch $OE_VERSION https://github.com/Bantics-Odoo/odoo $OE_HOME_EXT/
 
 echo -e "\n---- Create custom module directory ----"
-sudo su $OE_USER -c "mkdir $OE_HOME/custom"
-sudo su $OE_USER -c "mkdir $OE_HOME/custom/addons"
+sudo mkdir $OE_HOME/custom
+sudo mkdir $OE_HOME/custom/addons
 
 echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
@@ -137,11 +134,9 @@ if [ $GENERATE_RANDOM_PASSWORD = "True" ]; then
     OE_SUPERADMIN=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
 fi
 sudo su root -c "printf 'admin_passwd = ${OE_SUPERADMIN}\n' >> /etc/${OE_CONFIG}.conf"
-if [ $OE_VERSION >= "12.0" ]; then
-    sudo su root -c "printf 'http_port = ${OE_PORT}\n' >> /etc/${OE_CONFIG}.conf"
-else
-    sudo su root -c "printf 'xmlrpc_port = ${OE_PORT}\n' >> /etc/${OE_CONFIG}.conf"
-fi
+
+sudo su root -c "printf 'http_port = ${OE_PORT}\n' >> /etc/${OE_CONFIG}.conf"
+
 sudo su root -c "printf 'logfile = /var/log/${OE_USER}/${OE_CONFIG}.log\n' >> /etc/${OE_CONFIG}.conf"
 
 sudo su root -c "printf 'addons_path=${OE_HOME_EXT}/addons,${OE_HOME}/custom/addons\n' >> /etc/${OE_CONFIG}.conf"
@@ -238,21 +233,27 @@ else
   echo "Nginx isn't installed due to choice of the user!"
 fi
 
+# VirtualEnv
+echo -e "\n---- Install python packages/requirements ----"
+virtualenv -p python3 ${OE_HOME_EXT}/envOdoo
+source ${OE_HOME_EXT}/odoo/envOdoo/bin/activate
+pip install -r ${OE_HOME_EXT}/requirements.txt
+deactivate
+
+
 echo "  ******************************************************************************* "
 echo " " 
 echo -e "* Se debe configurar para arrancar desde pycharm, copiar y pegar estos valores"
+echo -e "* Primero, en File - Open abrir  ${OE_HOME_EXT}/odoo/ "
+echo -e "* Configurar "
 echo -e "* Script path: ${OE_HOME_EXT}/odoo/odoo-bin "
 echo -e "* Parameters: -c /etc/${OE_CONFIG}.conf"
 echo " "
 echo "-----------------------------------------------------------"
 echo "Listo! Otras especificaciones interesantes:"
 echo "Port: $OE_PORT"
-echo "User service: $OE_USER"
 echo "User PostgreSQL: $OE_USER"
 echo "Code location: $OE_USER"
 echo "Addons folder: $OE_USER/$OE_CONFIG/addons/"
 echo "Password superadmin (database): $OE_SUPERADMIN"
-echo "Start Odoo service: sudo service $OE_CONFIG start"
-echo "Stop Odoo service: sudo service $OE_CONFIG stop"
-echo "Restart Odoo service: sudo service $OE_CONFIG restart"
 echo "-----------------------------------------------------------"
