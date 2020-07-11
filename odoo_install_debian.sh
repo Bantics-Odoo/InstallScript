@@ -23,7 +23,7 @@ OE_HOME_EXT="$OE_HOME/odoo"
 # The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
 # Set to true if you want to install it, false if you don't need it or have it already installed.
 INSTALL_WKHTMLTOPDF="True"
-# Set the default Odoo port (you still have to use -c /etc/odoo-server.conf for example to use this.)
+# Set the default Odoo port
 OE_PORT="8069"
 # Choose the Odoo version which you want to install. For example: 13.0, 12.0, 11.0 or saas-18. When using 'master' the master version will be installed.
 # IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 13.0
@@ -34,7 +34,7 @@ INSTALL_NGINX="False"
 OE_SUPERADMIN="admin"
 # Set to "True" to generate a random password, "False" to use the variable in OE_SUPERADMIN
 GENERATE_RANDOM_PASSWORD="False"
-OE_CONFIG="odoo-${OE_USER}-dev" #archivo de configuracion en /etc
+OE_CONFIG="odoo-${OE_USER}-dev" #archivo de configuracion en
 # Set the website name
 WEBSITE_NAME="_"
 # Set the default Odoo longpolling port (you still have to use -c /etc/="odoo-${OE_USER}-dev.conf for example to use this.)
@@ -56,7 +56,7 @@ fi
 
 #Confirmacion
 read -p "Se ejecutara script con usuario ${OE_USER} si es correcto, presiona enter, sino CTRL+C para abortar"
- 
+
 echo "Continuamos"
 
 
@@ -127,10 +127,10 @@ echo -e "\n---- Setting permissions on home folder ----"
 sudo chown -R $OE_USER:$OE_USER $OE_HOME/*
 
 echo -e "* Removing existing config file"
-sudo rm /etc/${OE_CONFIG}.conf
+sudo rm $OE_HOME/${OE_CONFIG}.conf
 
 echo -e "* Creating server config file"
-sudo su root -c "printf '[options] \n; This is the password that allows database operations:\n' >> /etc/${OE_CONFIG}.conf"
+sudo su root -c "printf '[options] \n; This is the password that allows database operations:\n' >> $OE_HOME/${OE_CONFIG}.conf"
 if [ $GENERATE_RANDOM_PASSWORD = "True" ]; then
     echo -e "* Generating random admin password"
     OE_SUPERADMIN=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
@@ -245,7 +245,7 @@ deactivate
 echo "  "
 echo "  ******************************************************************************* "
 echo "  ******************************************************************************* "
-echo " " 
+echo " "
 echo -e "* Se debe configurar para arrancar desde pycharm, copiar y pegar estos valores"
 echo -e "* Primero, en File - Open abrir  ${OE_HOME_EXT}/ "
 echo -e "* Configurar Interprete: File - Settings - project: odoo - Project interpreter - Engranaje Add - Existing enviroment y poner path de la linea siguiente"
