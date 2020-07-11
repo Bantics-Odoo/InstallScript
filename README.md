@@ -24,7 +24,7 @@ If you set the parameter ```INSTALL_NGINX``` to ```True``` you should also confi
 
 ##### 1. Bajar el script:
 ```
-sudo wget https://raw.githubusercontent.com/Bantics-Odoo/InstallScript/13.0/odoo_install_debian.sh
+sudo wget https://raw.githubusercontent.com/Bantics-Odoo/InstallScript/13.0B/odoo_install_debian.sh
 ```
 ##### 2. Modifica los parametros con nano, de lo que creas necesario.
 There are a few things you can configure, this is the most used list:<br/>
