@@ -135,16 +135,17 @@ if [ $GENERATE_RANDOM_PASSWORD = "True" ]; then
     echo -e "* Generating random admin password"
     OE_SUPERADMIN=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
 fi
-sudo su root -c "printf 'admin_passwd = ${OE_SUPERADMIN}\n' >> /etc/${OE_CONFIG}.conf"
+sudo su root -c "printf 'admin_passwd = ${OE_SUPERADMIN}\n' >> $OE_HOME/${OE_CONFIG}.conf"
 
-sudo su root -c "printf 'http_port = ${OE_PORT}\n' >> /etc/${OE_CONFIG}.conf"
+sudo su root -c "printf 'http_port = ${OE_PORT}\n' >> $OE_HOME/${OE_CONFIG}.conf"
 
-sudo su root -c "printf 'logfile = /var/log/${OE_USER}/${OE_CONFIG}.log\n' >> /etc/${OE_CONFIG}.conf"
+# se deja comentado ya que en desarrollo es muuuy util q los logs salgan x consola
+sudo su root -c "printf ';logfile = /var/log/${OE_USER}/${OE_CONFIG}.log\n' >> $OE_HOME/${OE_CONFIG}.conf"
 
 sudo su root -c "printf 'addons_path=${OE_HOME_EXT}/addons,${OE_HOME}/custom/addons\n' >> /etc/${OE_CONFIG}.conf"
 
-sudo chown $OE_USER:$OE_USER /etc/${OE_CONFIG}.conf
-sudo chmod 640 /etc/${OE_CONFIG}.conf
+sudo chown $OE_USER:$OE_USER ${OE_HOME}/${OE_CONFIG}.conf
+sudo chmod 640 ${OE_HOME}/${OE_CONFIG}.conf
 
 #--------------------------------------------------
 # Install Nginx if needed
@@ -237,8 +238,8 @@ fi
 
 # VirtualEnv
 echo -e "\n---- Install python packages/requirements ----"
-virtualenv -p python3 ${OE_HOME_EXT}/envOdoo
-source ${OE_HOME_EXT}/envOdoo/bin/activate
+virtualenv -p python3 ${OE_HOME}/envOdoo
+source ${OE_HOME}/envOdoo/bin/activate
 pip install -r ${OE_HOME_EXT}/requirements.txt
 deactivate
 
@@ -249,12 +250,18 @@ echo " "
 echo -e "* Se debe configurar para arrancar desde pycharm, copiar y pegar estos valores"
 echo -e "* Primero, en File - Open abrir  ${OE_HOME_EXT}/ "
 echo -e "* Configurar Interprete: File - Settings - project: odoo - Project interpreter - Engranaje Add - Existing enviroment y poner path de la linea siguiente"
-echo -e "${OE_HOME_EXT}/envOdoo/bin/python"
+echo -e "${OE_HOME}/envOdoo/bin/python"
 echo -e "Add configuration - Templates - Python: poner nombre (Odoo) y los valores de abajo"
 echo -e "* Script path: ${OE_HOME_EXT}/odoo-bin "
-echo -e "* Parameters: -c /etc/${OE_CONFIG}.conf"
+echo -e "* Parameters: -c ${OE_HOME}/${OE_CONFIG}.conf"
 echo -e "* Working Directory: ${OE_HOME_EXT}/ "
 echo " "
+echo -e "Se puede correr manualmente primero "
+echo -e "cd ${OE_HOME_EXT}"
+echo -e "luego activando el env correspondiente"
+echo -e "source ${OE_HOME}/envOdoo/bin/activate"
+echo -e "y por ultimo corremos "
+echo -e "python ${OE_HOME_EXT}/odoo-bin -c ${OE_HOME}/${OE_CONFIG}.conf"
 echo "-----------------------------------------------------------"
 echo "Listo! Otras especificaciones interesantes:"
 echo "Port: $OE_PORT"
